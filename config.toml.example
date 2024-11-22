@@ -12,7 +12,7 @@ btrfs /boot --label=fedora-boot btrfs.boot
 btrfs none --label=fedora-btrfs btrfs.main
 btrfs / --subvol --name=root fedora-btrfs
 btrfs /var/home --subvol --name=home fedora-btrfs
-ostreecontainer --url docker pull ghcr.io/odilhao/bootc-sway:latest
+ostreecontainer --url docker pull ghcr.io/odilhao/bootc-server:latest
 
 firewall --disabled
 services --enabled=sshd
