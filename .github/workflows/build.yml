@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+
+
+env:
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  IMAGE_REGISTRY: ghcr.io/odilhao
+
+jobs:
+  build-swaywm:
+    permissions:
+      packages: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+      - uses: actions/checkout@v4
+      - name: Build container
+        run: podman build -t ${{ env.IMAGE_REGISTRY }}/bootc-server:${{ github.sha }} .
+      - name: Push Image Github SHA
+        run: podman push ${{ env.IMAGE_REGISTRY }}/bootc-server:${{ github.sha }}
+      - name: Tag Image as Latest
+        run: podman tag ${{ env.IMAGE_REGISTRY }}/bootc-server:${{ github.sha }} ${{ env.IMAGE_REGISTRY }}/bootc-server:latest
+      - name: Push Latest Image
+        run: podman push ${{ env.IMAGE_REGISTRY }}/bootc-server:latest
