@@ -12,7 +12,7 @@ env:
   IMAGE_REGISTRY: ghcr.io/odilhao
 
 jobs:
-  build-swaywm:
+  build-bootc-server:
     permissions:
       packages: write
     runs-on: ubuntu-24.04
